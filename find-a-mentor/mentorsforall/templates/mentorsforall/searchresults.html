@@ -1,0 +1,221 @@
+<!DOCTYPE HTML5>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bricklayer -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bricklayer/0.4.2/bricklayer.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/bricklayer/0.4.2/bricklayer.min.js"></script>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mentorsforall/footerstyle.css' %}">
+
+  <title>Search Results - Mentors for All</title>
+  <style>
+    :root {
+      --input-padding-x: 1.5rem;
+      --input-padding-y: 0.75rem;
+    }
+
+    .container-fluid {
+      margin: 20px 0px;
+    }
+
+    .btn{
+      background-color:#82d8d0;
+    }
+
+    .btn-default{
+	     color: #111 !important;
+    }
+
+    @media screen and (min-width: 1200px) {
+      .bricklayer-column-sizer {
+        /* divide by 3. */
+        width: 33.3%;
+      }
+    }
+
+    @media screen and (min-width: 768px) {
+      .bricklayer-column-sizer {
+        /* divide by 2. */
+        width: 50%;
+      }
+    }
+
+    .card{
+      margin-right:5px;
+    }
+
+    .slidecontainer {
+      width: 50%; /* Width of the outside container */
+    }
+
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 5px;
+      background: #d3d3d3;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #82d8d0;
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #4CAF50;
+      cursor: pointer;
+    }
+
+  </style>
+
+  <script type="text/javascript">
+    var bricklayer = new Bricklayer(document.querySelector('.bricklayer'))
+  </script>
+
+  <script type="text/javascript">
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value; // Display the default slider value
+
+    // Update the current slider value (each time you drag the slider handle)
+    slider.oninput = function() {
+      output.innerHTML = this.value;
+    }
+  </script>
+</head>
+
+<body>
+  {% include "mentorsforall/navbar.html" %}
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6 mx-auto" style="border-right:1px solid #ccc;">
+        <form type="get" class="form-inline" action="{% url 'do_search' %}">
+          <div class="col-md-6">
+            <h3>Find a Mentor by
+              <select class="form-control" name="mentor_dropdown" id="mentor_dropdown">
+                <option>Subject</option>
+                <option>Name</option>
+                <option>City</option>
+              </select></h3>
+          </div>
+          <div class="col-md-6">
+            <h3>
+              <input id="search_box" name="search_box_mentor" class="form-control mr-sm-2" type="text" placeholder="Search">
+              <button class="btn btn-default" type="submit">Search</button>
+            </h3>
+          </div>
+        </form>
+
+          <div class="col-sm-12">
+            <p>
+              <label for="amount">Age range:</label>
+              <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+            </p>
+            <p>
+              <div class="slidecontainer">
+                <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+              </div>
+            </p>
+
+            Gender
+            <br>
+            <label><input type="checkbox" id="filter_gender_m"> Male</label><br>
+            <label><input type="checkbox" id="filter_gender_f"> Female</label><br>
+            <label><input type="checkbox" id="filter_gender_o"> Other</label>
+
+            </p>
+          </div>
+
+
+        <form type="get" class="form-inline" action="{% url 'do_search' %}">
+          <div class="col-md-6">
+          <h3>Find an Event by
+            <select class="form-control" name="event_dropdown" id="event_dropdown">
+            <option>Subject</option>
+            <option>Name</option>
+            <option>City</option>
+            <option>Mentor</option>
+          </select></h3>
+        </div>
+        <div class="col-md-6">
+          <h3>
+          <input id="search_box" name="search_box_event" class="form-control mr-sm-2" type="text" placeholder="Search">
+          <button class="btn btn-default" type="submit">Search</button>
+        </h3>
+      </div>
+        </form>
+      </div>
+      <div class="col-md-6 mx-auto">
+
+
+        <h2>Search results</h2>
+        {% if searchedfor == "mentor" %}
+          <div class="bricklayer">
+          {% for match in matched %}
+            <div class="card" style="width:200px;">
+              <img class="card-img-top" src="{% if match.image %}{{ match.image.url }}{% endif %}" alt="Card image" style="width:100%">
+              <div class="card-body">
+                <h4 class="card-title">{{ match.givenname }} {{ match.familyname }}</h4>
+                <p class="card-text">{% for s in match.subjects.all %}<span class="badge badge-info">{{ s.name }}</span> {% endfor %}</p>
+              </div>
+              <div class="card-footer">
+                <a href="/profile/{{match.id}}" class="btn btn-default">See Profile</a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="bricklayer">
+          {% for match in matched %}
+            <div class="card" style="width:200px;">
+              <img class="card-img-top" src="{% if match.image %}{{ match.image.url }}{% endif %}" alt="Card image" style="width:100%">
+              <div class="card-body">
+                <h4 class="card-title">{{ match.name }}</h4>
+                <p class="card-text">{% for s in match.subjects.all %}<span class="badge badge-info">{{ s.name }}</span> {% endfor %}</p>
+                <p class="card-text">
+                  <small class="text-muted">City: {{match.city}}</small>
+                  <br>
+                  <small class="text-muted">Host: {{match.host.givenname}} {{match.host.familyname}}</small>
+                </p>
+              </div>
+              <div class="card-footer">
+                <a href="{% url 'event' event_id=match.id %}" class="btn btn-default">View Event</a>
+              </div>
+            </div>
+          {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% include "mentorsforall/footer.html" %}
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

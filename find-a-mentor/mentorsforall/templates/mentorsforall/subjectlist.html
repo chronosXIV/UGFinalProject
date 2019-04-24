@@ -1,0 +1,134 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'mentorsforall/style.css' %}">
+
+<!DOCTYPE HTML5>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <title>Browse Categories - Mentors for All</title>
+  <script type="text/javascript">
+    $(function() {
+      $('#myList a').on('click', function(e) {
+        e.preventDefault()
+        $(this).tab('show')
+      });
+    });
+  </script>
+  <style>
+    :root {
+      --input-padding-x: 1.5rem;
+      --input-padding-y: 0.75rem;
+    }
+
+    .container-fluid {
+      margin: 20px 0px;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    body {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body > .container-fluid {
+      flex-grow: 1;
+    }
+  </style>
+</head>
+
+<body>
+  {% include "mentorsforall/navbar.html" %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-4">
+        <div class="list-group" id="list-tab" role="tablist">
+          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-academic-list" data-toggle="list" href="#list-academic" role="tab" aria-controls="academic">
+            Academic
+          </a>
+          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-language-list" data-toggle="list" href="#list-language" role="tab" aria-controls="language">Language</a>
+          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-musicalinstruments-list" data-toggle="list" href="#list-musicalinstruments" role="tab" aria-controls="musicalinstruments">Musical
+            Instruments</a>
+          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-arts-list" data-toggle="list" href="#list-arts" role="tab" aria-controls="arts">Arts</a>
+          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-healthandfitness-list" data-toggle="list" href="#list-healthandfitness" role="tab" aria-controls="healthandfitness">
+            Health and Fitness
+            <span class="badge badge-primary badge-pill">2</span>
+          </a>
+          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-professional-list" data-toggle="list" href="#list-professional" role="tab" aria-controls="professional">Professional</a>
+          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-lifestyle-list" data-toggle="list" href="#list-lifestyle" role="tab" aria-controls="lifestyle">Lifestyle</a>
+        </div>
+      </div>
+      <div class="col-8">
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade" id="list-academic" role="tabpanel" aria-labelledby="list-academic-list">
+            {% for s in subjectlist %}
+            {% if s.category == "AC" %}
+            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
+            {% endif %}
+            {% endfor %}
+          </div>
+          <div class="tab-pane fade" id="list-language" role="tabpanel" aria-labelledby="list-language-list">
+            {% for s in subjectlist %}
+            {% if s.category == "LANG" %}
+            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
+            {% endif %}
+            {% endfor %}
+          </div>
+          <div class="tab-pane fade" id="list-musicalinstruments" role="tabpanel" aria-labelledby="list-musicalinstruments-list">
+            {% for s in subjectlist %}
+            {% if s.category == "I" %}
+            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
+            {% endif %}
+            {% endfor %}</div>
+          <div class="tab-pane fade" id="list-arts" role="tabpanel" aria-labelledby="list-arts-list">
+            {% for s in subjectlist %}
+            {% if s.category == "AR" %}
+            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
+            {% endif %}
+            {% endfor %}
+          </div>
+          <div class="tab-pane fade" id="list-healthandfitness" role="tabpanel" aria-labelledby="list-healthandfitness-list">
+            {% for s in subjectlist %}
+            {% if s.category == "HANDF" %}
+            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
+            {% endif %}
+            {% endfor %}
+          </div>
+          <div class="tab-pane fade" id="list-professional" role="tabpanel" aria-labelledby="list-professional-list">
+            {% for s in subjectlist %}
+            {% if s.category == "P" %}
+            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
+            {% endif %}
+            {% endfor %}
+          </div>
+          <div class="tab-pane fade" id="list-lifestyle" role="tabpanel" aria-labelledby="list-lifestyle-list">
+            {% for s in subjectlist %}
+            {% if s.category == "L" %}
+            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "mentorsforall/footer.html" %}
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

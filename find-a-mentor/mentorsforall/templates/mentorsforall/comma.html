@@ -1,0 +1,7 @@
+{% if not forloop.last %}
+  {% ifequal forloop.revcounter 2 %}and
+  {% else %}
+  ,
+  {% endifequal %}
+  {% else %}
+{% endif %}

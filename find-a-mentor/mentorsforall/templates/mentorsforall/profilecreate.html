@@ -1,0 +1,155 @@
+<!DOCTYPE HTML5>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- Custom CSS -->
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'mentorsforall/formstyle.css' %}">
+  <title>Create Your Profile - Mentors for All</title>
+  <style>
+    :root {
+      --input-padding-x: 1.5rem;
+      --input-padding-y: 0.75rem;
+    }
+
+    .login,
+    .image {
+      min-height: 100vh;
+    }
+
+    .profile-userpic img {
+      float: none;
+      margin: 0 auto;
+      width: 50%;
+      border-radius: 2rem;
+    }
+
+    .bg-image {
+      background-image: url('https://images.pexels.com/photos/1120344/pexels-photo-1120344.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .login-heading {
+      font-weight: 300;
+    }
+
+    .btn-login {
+      font-size: 0.9rem;
+      letter-spacing: 0.05rem;
+      padding: 0.75rem 1rem;
+      border-radius: 2rem;
+    }
+
+    .btn {
+      background-color: #82d8d0;
+    }
+
+    .btn-default {
+      color: #fff !important;
+    }
+
+    .my-custom-width {
+      max-width: 100%;
+    }
+
+    .my-custom-position{
+      left:20%;
+    }
+
+    a {
+      color:#111;
+    }
+
+    a:hover {
+      color:#82d8d0;
+    }
+
+    textarea {
+      font-size: 0.9rem;
+      padding: 0.75rem 1rem !important;
+      border-radius: 2rem !important;
+      -moz-border-radius: 2rem;
+      -webkit-border-radius: 2rem;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row no-gutter">
+      <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+      <div class="col-md-8 col-lg-6">
+        <div class="login d-flex align-items-center py-5">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-9 col-lg-8 mx-auto">
+                <h3 class="login-heading mb-4">Welcome to the Mentors for All, {{ profile.givenname }}! <br>Create your profile:</h3>
+
+                <form method="post" action="{% url 'profile_image_upload_endpoint' %}" enctype="multipart/form-data" class="form-horizontal">
+                  {% csrf_token %}
+                  <div class="profile-userpic">
+                    <img src="{% if profile.image %}{{ profile.image.url }}{% else %}https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png{% endif %}" alt="Profile Image" id="profile_image_image">
+                  </div>
+                  <div class="form-label-group">
+                    <input type="file" name="profile_image" value="" id="profile_image">
+                    <input type="submit" name="profile_image_button" value="Upload Image" id="profile_image_button" class="btn btn-default upload-image-button">
+                  </div>
+                </form>
+
+
+                <form method="post" action="{% url 'complete_profile' %}" class="form-horizontal">
+                  {% csrf_token %}
+
+                  <div class="form-label-group">
+                    <input type="text" id="register_dob" name="register_dob" placeholder="yyyy-mm-dd" class="form-control" required>
+                    <label for="register_dob" class="col-sm-2 col-form-label my-custom-width">Date of Birth (YYYY-MM-DD)</label>
+                  </div>
+
+                  <div class="form-label-group">
+                    <input type="text" id="register_job" name="register_job" autocomplete="off" class="form-control" placeholder="Primary Job" required>
+                    <label for="register_job" class="col-sm-2 col-form-label my-custom-width">Primary Job</label>
+                  </div>
+
+                  <div class="form-label-group">
+                    <input type="text" id="register_city" name="register_city" autocomplete="off" class="form-control" placeholder="City" required>
+                    <label for="register_city" class="col-sm-2 col-form-label my-custom-width">City</label>
+                  </div>
+
+                  <div class="form-label-group" style="left:10px;">
+                    <label for="register_gender" class="col-sm-2 col-form-label">Gender:</label>
+                    <select id="register_gender" class="selectpicker form-control col-sm-5 col-form-label my-custom-position" data-style="btn-info" name="register_gender" style="position:relative;" required>
+                      <option selected="selected" value="M">Male</option>
+                      <option value="F">Female</option>
+                      <option value="O">Other</option>
+                    </select>
+                  </div>
+
+                  <div class="form-label-group">
+                    <textarea class="form-control" name="register_about" autocomplete="off" id="register_about" rows="3" placeholder="About" required></textarea>
+                  </div>
+
+                  <button class="btn btn-lg btn-default btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" id="save_profile_button">Save Profile</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

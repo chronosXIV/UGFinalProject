@@ -1,0 +1,225 @@
+<!DOCTYPE HTML5>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- Custom CSS -->
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'mentorsforall/footerstyle.css' %}">
+  <title>Mentors for All</title>
+  <style>
+    .container {
+      margin: 20px 0px;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    body {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body>.container{
+      flex-grow: 1;
+    }
+
+    /* event container */
+    .event {
+      margin: 20px 0;
+    }
+
+    /* event sidebar */
+    .event-sidebar {
+      padding: 20px 0 10px 0;
+      background: #fff;
+    }
+
+    .event-userpic img {
+      float: none;
+      margin: 0 auto;
+      width: 50%;
+      height: 50%;
+      border-radius: 2rem;
+    }
+
+    .event-usertitle {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .event-usertitle-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 7px;
+    }
+
+    .event-usertitle-job {
+      text-transform: uppercase;
+      color: #5b9bd1;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .event-userbuttons {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .event-userbuttons .btn {
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 15px;
+      margin-right: 5px;
+    }
+
+    .event-userbuttons .btn:last-child {
+      margin-right: 0px;
+    }
+
+    /* event Content */
+    .event-content {
+      padding: 20px;
+      background: #fff;
+      min-height: 460px;
+    }
+
+    .well{margin:0 40 40 40;}
+    .glyphicon { margin-right:5px;}
+    .rating .glyphicon {font-size: 22px;}
+    .rating-num { margin-top:0px;font-size: 54px; }
+    .progress { margin-bottom: 5px;}
+    .progress-bar { text-align: left; }
+    .rating-desc .col-md-3 {padding-right: 0px;}
+    .sr-only { margin-left: 5px;overflow: visible;clip: auto; }
+
+    .progress-bar {
+        text-align: left;
+    }
+
+    .progress-bar-success {
+        background-color: #5cb85c;
+    }
+
+    .btn-default {
+       color: #111 !important;
+       background-color:#82d8d0;
+    }
+  </style>
+</head>
+
+<body>
+  {% include "mentorsforall/navbar.html" %}
+  <div class="container">
+    <div class="row event">
+      <div class="col-md-3">
+        <div class="event-sidebar">
+          <!-- SIDEBAR USERPIC -->
+          <div class="event-userpic">
+            <img src="{% if event.image %}{{ event.image.url }}{% endif %}" alt="event Image" class="img-responsive" style="width:100%; height:auto;">
+          </div>
+          <!-- END SIDEBAR USERPIC -->
+          <!-- SIDEBAR USER TITLE -->
+          <div class="event-usertitle">
+            <div class="event-usertitle-name">
+              <h3 class="media-heading">{{ event.name }}</h3>
+            </div>
+            <div class="event-usertitle-job">
+              Hosted by: {{ event.host.givenname }} {{ event.host.familyname }}
+            </div>
+            <div>
+              {% for subject in event.subjects.all %}
+              <span class="badge badge-light">{{ subject.name }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          <!-- END SIDEBAR USER TITLE -->
+          <!-- SIDEBAR BUTTONS -->
+          <div class="event-userbuttons">
+            <form id="eventmanagement" action="{% url 'eventmanagement' event_id=event.id %}" method="POST">
+              {% csrf_token %}
+              {% if request.user.id != event.host.id %}
+              {% if userattending %}
+              <button type="submit" class="btn btn-danger btn-sm" id="event_button" name="event_button" value="leave">Leave Event</button>
+              {% else %}
+              <button type="submit" class="btn btn-success btn-sm" id="event_button" name="event_button" value="attend">Attend Event</button>
+              {% endif %}
+              {% endif %}
+            </form>
+            {% if request.user.id != event.host.id %}
+            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#messageModal">Contact Host</button>
+            {% else %}
+            <a href="{% url 'eventedit' event_id=event.id %}" class="btn btn-default btn-sm">Modify Event</a>
+            {% endif %}
+          </div>
+          <!-- END SIDEBAR BUTTONS -->
+        </div>
+      </div>
+      <div class="col-md-9">
+        <ul class="list-group">
+          <div class="event-content">
+            <li class="list-group-item">
+              <p><b>Date</b>: {{ event.date }}</p>
+              <p><b>Time</b>: {{ event.time }}</p>
+              <p><b>Location</b>: {{ event.location }}</p>
+              <p><b>City</b>: {{ event.city }}</p>
+            </li>
+            <li class="list-group-item">
+              <h4>About:</h4>
+              <p>{{ event.about }}</p>
+            </li>
+            <li class="list-group-item">
+              <h4>Attendee List:</h4>
+              {% for attendee in event.attendees.all %}
+              <p>{{ attendee.givenname }} {{ attendee.familyname }}</p>
+              {% endfor %}
+            </li>
+            <li class="list-group-item">
+              {% if event.public %}
+              <p>This is a public event.</p>
+              {% else %}
+              <p>This is a private event.</p>
+              {% endif %}
+            </li>
+          </div>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="messageModalLabel">Contact {{ event.host.givenname }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <div class="modal-body">
+            <p>Go to {{event.host.givenname}}'s <a href="{% url 'profile_view' profile_id=event.host.id %}" >profile<a></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+    </div>
+  </div>
+  {% include "mentorsforall/footer.html" %}
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

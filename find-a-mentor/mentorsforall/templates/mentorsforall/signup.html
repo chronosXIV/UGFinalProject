@@ -1,0 +1,250 @@
+<!DOCTYPE HTML5>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- Custom CSS -->
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'mentorsforall/formstyle.css' %}">
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+  <title>Sign Up - Mentors for All</title>
+  <style>
+    :root {
+      --input-padding-x: 1.5rem;
+      --input-padding-y: 0.75rem;
+    }
+
+    .login,
+    .image {
+      min-height: 100vh;
+    }
+
+    .bg-image-mentor {
+      background-image: url('https://images.pexels.com/photos/1120344/pexels-photo-1120344.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .bg-image-mentee {
+      background-image: url('https://images.pexels.com/photos/1855269/pexels-photo-1855269.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .login-heading {
+      font-weight: 300;
+    }
+
+    .btn-login {
+      font-size: 0.9rem;
+      letter-spacing: 0.05rem;
+      padding: 0.75rem 1rem;
+      border-radius: 2rem;
+    }
+
+    #register_button, #add_field{
+      background-color: #82d8d0;
+    }
+
+    .btn-default {
+      color: #fff !important;
+      font-size: 0.9rem;
+      letter-spacing: 0.05rem;
+      padding: 0.75rem 1rem;
+      border-radius: 2rem;
+    }
+
+    .btn-info {
+      background-color: #82d8d0;
+      border-color: #82d8d0;
+      font-size: 0.9rem;
+      letter-spacing: 0.05rem;
+      padding: 0.75rem 1rem;
+      border-radius: 2rem;
+    }
+
+    .my-custom-position{
+      left: 20%;
+    }
+
+    .bs-searchbox input {
+      padding: 0.1rem !important;
+    }
+
+    a {
+      color: #111;
+    }
+
+    a:hover {
+      color: #82d8d0;
+    }
+
+  </style>
+  <!-- https://www.sanwebe.com/2013/03/addremove-input-fields-dynamically-with-jquery -->
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var max_fields = 5; //maximum input boxes allowed
+      var wrapper = $(".input_fields_wrap"); //Fields wrapper
+      var add_button = $(".add_field_button"); //Add button ID
+
+      var x = 1; //initlal text box count
+      $(add_button).click(function(e) { //on add input button click
+        e.preventDefault();
+        if (x < max_fields) { //max input box allowed
+          x++; //text box increment
+          $(wrapper).append('<div><div class="row"><div class="col-sm-7"><div class="form-label-group"><input type="text" id="new_subject_'+x+'" name="new_subject_'+x+'" class="form-control" placeholder="Subject"><label for="new_subject_'+x+'" class="col-sm-2 col-form-label my-custom-width">Subject</label></div></div><div class="col-sm-5"><div class="form-label-group"><select class="selectpicker form-control col-form-label" data-style="btn-info" name="new_subject_category_'+x+'" id="new_subject_category_'+x+'" style="position:absolute;">{% for category in categories %}<option>{{ category }}</option>{% endfor %}</select></div></div></div><a href="#" class="remove_field">Remove</a></div>'); //add input box
+        }
+      });
+
+      $(wrapper).on("click", ".remove_field", function(e) { //user click on remove text
+        e.preventDefault();
+        $(this).parent('div').remove();
+        x--;
+      })
+    });
+  </script>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row no-gutter">
+      {% if role == 'TOR' %}
+      <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image-mentor"></div>
+      {% else %}
+      <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image-mentee"></div>
+      {% endif %}
+      <div class="col-md-8 col-lg-6">
+        <div class="login d-flex align-items-center py-5">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-9 col-lg-8 mx-auto">
+                <h3 class="login-heading mb-4">Sign Up</h3>
+
+                <form method="post" action="{% url 'complete_signup' %}" class="form-horizontal">
+                  {% csrf_token %}
+                  <div class="form-label-group">
+                    <input type="text" id="register_first_name" name="register_first_name" class="form-control" placeholder="First Name" required>
+                    <label for="register_first_name" class="col-sm-2 col-form-label my-custom-width">First Name</label>
+                  </div>
+
+                  <div class="form-label-group">
+                    <input type="text" id="register_last_name" name="register_last_name" class="form-control" placeholder="Last Name" required>
+                    <label for="register_last_name" class="col-sm-2 col-form-label my-custom-width">Last Name</label>
+                  </div>
+
+                  <div class="form-label-group">
+                    <input type="text" id="register_email" name="register_email" class="form-control" placeholder="Email" required>
+                    <label for="register_email" class="col-sm-2 col-form-label my-custom-width">Email</label>
+                  </div>
+
+                  <div class="form-label-group">
+                    <input type="text" id="register_username" name="register_username" autocomplete="off" class="form-control" placeholder="Username" required>
+                    <label for="register_username" class="col-sm-2 col-form-label my-custom-width">Username</label>
+                  </div>
+
+                  <div class="form-label-group">
+                    <input type="password" id="register_password" name="register_password" autocomplete="off" class="form-control" placeholder="Password" required>
+                    <label for="register_password" class="col-sm-2 col-form-label my-custom-width">Password</label>
+                  </div>
+
+                  <div class="form-label-group" style="left:10px;">
+                    <label for="register_role" class="col-sm-2 col-form-label">Role:</label>
+                    <select id="register_role" class="selectpicker form-control col-sm-5 col-form-label my-custom-position" data-style="btn-info" name="register_role" style="position:absolute;" required>
+                      {% if role == 'TOR' %}
+                      <option selected="selected" value="TOR">Mentor</option>
+                      <option value="TEE">Mentee</option>
+                      {% else %}
+                      <option selected="selected" value="TEE">Mentee</option>
+                      <option value="TOR">Mentor</option>
+                      {% endif %}
+                    </select>
+                  </div>
+                  <br>
+
+                  <div class="form-label-group" style="top:-15px;left:10px;">
+                    <label for="register_subjects" class="col-sm-2 col-form-label">Subjects:</label>
+                    <script type="text/text/javascript">
+                      $(document).ready(function() {
+                        $('.selectpicker').selectpicker();
+                      });
+                    </script>
+                    <select class="selectpicker form-control col-sm-5 col-form-label my-custom-position" multiple data-actions-box="true" data-live-search="true" data-style="btn-info" name="register_subjects" style="position:absolute;" data-size="9"
+                      required>
+                      {% for category in categories %}
+                      <optgroup label="{{ category }}">
+                        {% for subject in subjects %}
+                        {% if subject.get_category_display == category %}
+                        <option value="{{ subject.name }}">{{ subject.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                      </optgroup>
+                      {% endfor %}
+                      <option value="n-a">None of the above</option>
+                    </select>
+                  </div>
+
+                  <p>(Not Required) Add New Subject:</p>
+                  <div class="input_fields_wrap">
+                    <div>
+                    <div class="row">
+                      <div class="col-sm-7">
+                        <div class="form-label-group">
+                          <input type="text" id="new_subject" name="new_subject" class="form-control" placeholder="Subject">
+                          <label for="new_subject" class="col-sm-2 col-form-label my-custom-width">Subject</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-5">
+                        <div class="form-label-group">
+                          <script type="text/text/javascript">
+                            $(document).ready(function() {
+                              $('.selectpicker').selectpicker();
+                            });
+                          </script>
+                          <select class="selectpicker form-control col-form-label" data-style="btn-info" name="new_subject_category" id="new_subject_category">
+                            {% for category in categories %}
+                            <option>{{ category }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                  <button class="add_field_button btn btn-default" id="add_field">Add More Fields</button>
+
+                  <br>
+                  <br>
+                  <h4>Your data</h4>
+                  <p>We require your personal information in order to match you with others on the site. Your data will never be shared with any third parties without your consent.</p>
+                  <div class="custom-control custom-checkbox mb-3">
+                    <input type="checkbox" name="register_privacy_consent" class="custom-control-input" id="customCheck1" required>
+                    <label class="custom-control-label" for="customCheck1">I accept</label>
+                  </div>
+
+                  <button class="btn btn-lg btn-default btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" id="register_button">Sign Up</button>
+                  <div class="text-center">
+                    <a class="small" id="signin_button" href="{% url 'signin' %}">Already a member? Sign in here.</a></div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML5>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <title>Mentors for All</title>
+  <style>
+
+    .login {
+      min-height: 100vh;
+    }
+
+    .bg-image {
+      /* background-image: url('http://images5.fanpop.com/image/photos/24900000/Anakin-and-Obi-wan-obi-wan-kenobi-and-anakin-skywalker-24924471-1392-2000.jpg'); */
+      background-image: url('https://images.pexels.com/photos/630839/pexels-photo-630839.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .btn {
+      background-color:#82d8d0;
+    }
+
+    .btn-default {
+      color: #fff !important;
+    }
+
+    .login-heading {
+      font-weight: 300;
+    }
+
+    .btn-login {
+      font-size: 1.4rem;
+      letter-spacing: 0.05rem;
+      border-radius: 2rem;
+      width: 140%;
+      height: 20%;
+      right: 20%;
+      position: relative;
+    }
+
+    a {
+      color:#111;
+    }
+    a:hover {
+      color:#82d8d0;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row no-gutter">
+      <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+      <div class="col-md-8 col-lg-6">
+        <div class="login d-flex align-items-center py-5">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-9 col-lg-8 mx-auto">
+                <form method="post" action="{% url 'signup' %}">
+                  {% csrf_token %}
+                  <button class="btn btn-lg btn-default btn-block btn-login text-uppercase font-weight-bold mb-5" type="submit" id="role_button" name="role_button" value="TOR">I want to be a Mentor</button>
+                  <button class="btn btn-lg btn-default btn-block btn-login text-uppercase font-weight-bold mb-5" type="submit" id="role_button" name="role_button" value="TEE">I want to be a Mentee</button>
+                  <br>
+                  <div class="text-center">
+                    <a class="small" id="signin_button" href="{% url 'signin' %}">Already a member? Sign in here.</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

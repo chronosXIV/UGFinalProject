@@ -1,0 +1,177 @@
+<!--  https://www.bootply.com/sY7gQy6XF7-->
+
+<!DOCTYPE HTML5>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <title>Edit Your Profile - Mentors for All</title>
+
+  <style>
+    :root {
+      --input-padding-x: 1.5rem;
+      --input-padding-y: 0.75rem;
+    }
+
+    .btn-default {
+       color: #111 !important;
+       background-color:#82d8d0;
+    }
+
+    .profile-userpic img {
+      float: none;
+      margin: 0 auto;
+      width: 50%;
+      border-radius: 2rem;
+    }
+
+    .bs-searchbox input {
+      padding: 0.1rem !important;
+    }
+
+    a {
+      color: #111;
+    }
+
+    a:hover {
+      color: #82d8d0;
+    }
+  </style>
+</head>
+
+<body>
+  {% include "mentorsforall/navbar.html" %}
+  <div class="container">
+    <h1>Edit Profile</h1>
+    <hr>
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-3">
+        <div class="text-center">
+          <div class="profile-userpic">
+            <img src="{% if profile.image %}{{ profile.image.url }}{% else %}https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png{% endif %}" alt="Profile Image" id="profile_image_image">
+          </div>
+          <br>
+          <h6>Upload a different photo...</h6>
+          <form method="post" action="{% url 'profile_image_upload_endpoint' %}" enctype="multipart/form-data" class="form-horizontal">
+            {% csrf_token %}
+            <input type="file" name="profile_image" class="form-control" value="" id="profile_image">
+            <br>
+            <input type="submit" name="profile_image_button" value="Upload Image" id="profile_image_button" class="btn btn-default upload-image-button">
+          </form>
+        </div>
+      </div>
+
+      <!-- edit form column -->
+      <div class="col-md-9 personal-info">
+        <h3>Personal Info</h3>
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-lg-3 control-label">First Name:</label>
+            <div class="col-lg-8">
+              <input class="form-control" id="register_first_name" name="register_first_name" type="text" value="{{profile.givenname}}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Last Name:</label>
+            <div class="col-lg-8">
+              <input class="form-control" d="register_last_name" name="register_last_name" type="text" value="{{profile.familyname}}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Email:</label>
+            <div class="col-lg-8">
+              <input class="form-control" id="register_email" name="register_email" type="text" value="{{request.user.email}}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Date of Birth:</label>
+            <div class="col-lg-8">
+              <input class="form-control" id="register_dob" name="register_dob" type="text" value="{{profile.birthdate}}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">City:</label>
+            <div class="col-lg-8">
+              <input class="form-control" id="register_city" name="register_city" type="text" value="{{profile.city}}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Job:</label>
+            <div class="col-lg-8">
+              <input class="form-control" id="register_job" name="register_job" type="text" value="{{profile.job}}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Gender:</label>
+            <div class="col-lg-8">
+              <select id="register_gender" name="register_gender" class="selectpicker form-control" data-style="btn-info" required>
+                <option selected="selected" value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="O">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">About:</label>
+            <div class="col-lg-8">
+              <textarea class="form-control" name="register_about" autocomplete="off" id="register_about" value="{{profile.about}}"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-3 control-label">Username:</label>
+            <div class="col-md-8">
+              <input class="form-control" id="register_username" name="register_username" type="text" value="{{request.user.username}}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-3 control-label">Password:</label>
+            <div class="col-md-8">
+              <input class="form-control" id="register_password" name="register_password" type="password" value="11111122333">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-3 control-label">Confirm password:</label>
+            <div class="col-md-8">
+              <input class="form-control" id="register_password" name="register_password" type="password" value="11111122333">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-3 control-label"></label>
+            <div class="col-md-8">
+              <input type="button" class="btn btn-success" value="Save Changes">
+              <span></span>
+              <input type="reset" class="btn btn-warning" value="Cancel">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <hr>
+  {% include "mentorsforall/footer.html" %}
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

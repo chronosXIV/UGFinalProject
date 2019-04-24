@@ -1,0 +1,275 @@
+<!-- Developer: Elif Sebnem Cudi
+
+Below code was made possible using these resources:
+
+
+-->
+
+<!DOCTYPE HTML5>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  {% if request.profile.id != profile.id %}
+  <title>{{ profile.givenname }}'s Profile - Mentors for All</title>
+  {% else %}
+  <title>Your Profile - Mentors for All</title>
+  {% endif %}
+  <style>
+    body {
+      background: #ffffff;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    body {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body > .container-fluid {
+      flex-grow: 1;
+    }
+
+    /* Profile container */
+    .profile {
+      margin: 20px 0;
+    }
+
+    /* Profile sidebar */
+    .profile-sidebar {
+      padding: 20px 0 10px 0;
+      background: #fff;
+    }
+
+    .profile-userpic img {
+      float: none;
+      margin: 0 auto;
+      width: 50%;
+      height: 50%;
+      border-radius: 2rem;
+    }
+
+    .profile-usertitle {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .profile-usertitle-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 7px;
+    }
+
+    .profile-usertitle-job {
+      text-transform: uppercase;
+      color: #5b9bd1;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .profile-userbuttons {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .profile-userbuttons .btn {
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 15px;
+      margin-right: 5px;
+    }
+
+    .profile-userbuttons .btn:last-child {
+      margin-right: 0px;
+    }
+
+    /* Profile Content */
+    .profile-content {
+      padding: 20px;
+      background: #fff;
+      min-height: 460px;
+    }
+
+    .well{margin:0 40 40 40;}
+    .well {
+      min-height: 20px;
+      padding: 19px;
+      margin-bottom: 20px;
+      background-color: #f5f5f5;
+      border: 1px solid #e3e3e3;
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.05);
+      box-shadow: inset 0 1px 1px rgba(0,0,0,0.05)
+    }
+
+    h1 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .glyphicon { margin-right:5px;}
+    .rating .glyphicon {font-size: 22px;}
+    .rating-num { margin-top:0px;font-size: 54px; }
+    .progress { margin-bottom: 5px;}
+    .progress-bar { text-align: left; }
+    .rating-desc .col-md-3 {padding-right: 0px;}
+    .sr-only { margin-left: 5px;overflow: visible;clip: auto; }
+
+    .progress-bar {
+        text-align: left;
+    }
+
+    .progress-bar-success {
+        background-color: #5cb85c;
+    }
+
+    .btn {
+      background-color:#82d8d0;
+    }
+
+    .btn-default {
+       color: #111 !important;
+    }
+
+    a {
+      color: #111;
+    }
+
+    a:hover {
+      color: #82d8d0;
+    }
+  </style>
+</head>
+
+<body>
+  {% include "mentorsforall/navbar.html" %}
+  <div class="container">
+    <div class="row profile">
+      <div class="col-md-3">
+        <div class="profile-sidebar">
+          <!-- SIDEBAR USERPIC -->
+          <div class="profile-userpic">
+            <img src="{% if profile.image %}{{ profile.image.url }}{% else %}https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png{% endif %}" alt="Profile Image" class="img-responsive" style="width:100%; height:auto;">
+          </div>
+          <!-- END SIDEBAR USERPIC -->
+          <!-- SIDEBAR USER TITLE -->
+          <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+              <h3 class="media-heading">{{ profile.givenname }} {{ profile.familyname }}</h3>
+            </div>
+            <div class="profile-usertitle-job">
+              {{ profile.job }}
+            </div>
+          </div>
+          <!-- END SIDEBAR USER TITLE -->
+          <!-- SIDEBAR BUTTONS -->
+          <div class="profile-userbuttons">
+            {% if request.profile.id != profile.id %}
+            <form action="{% url 'messaging' %}">
+              <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal">Message</button>
+            </form>
+            {% else %}
+            <a href="{% url 'profileedit' %}" class="btn btn-default btn-sm">Edit Profile</a>
+            {% endif %}
+          </div>
+          <!-- END SIDEBAR BUTTONS -->
+        </div>
+      </div>
+      <div class="col-md-9">
+        <ul class="list-group">
+          <div class="profile-content">
+            <li class="list-group-item">
+              <p>Age: {{ age }}</p>
+              <p><span>Gender: {{ gender_icon|safe }}</span></p>
+              {% if profile.role == 'TOR' %}
+              <p> Mentors in:
+                {% else %}
+                <p> Interested in:
+                  {% endif %}
+                  {% for subject in profile.subjects.all %}
+                  {{ subject.name }}{% include "mentorsforall/comma.html" %}
+                  {% endfor %}
+                </p>
+            </li>
+            <li class="list-group-item">
+              <h4>About:</h4>
+              <p>{{ profile.about }}</p>
+            </li>
+            <li class="list-group-item">
+              <h4>Comments:</h4>
+              {% for m in messages %}
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="panel panel-default">
+                    {% if m.public == True %}
+                    <div class="panel-heading">
+                      <span class="glyphicon glyphicon-user"></span>
+                      <a href="/profile/{{m.sender.id}}">{{ m.sender.givenname }} {{ m.sender.familyname }}</a>:
+                      <span class="pull-right" style="font-weight: bold; font-size: 12px; color: #555">[Sent: {{ m.timestamp_sent }}]</span>
+                    </div>
+                    <div class="panel-body">{{ m.content }}</div>
+                    <div class="panel-footer"></div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% empty %}
+              <p>No comments yet!</p>
+              {% endfor %}
+            </li>
+          </div>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title" id="myModalLabel">Message {{profile.givenname}}</h4>
+          </div>
+          <div class="modal-body">
+            <center>
+              <form method="POST" action="/profile/post_message">
+                {% csrf_token %}
+                <input type="hidden" name="receiver_id" value="{{ profile.id }}">
+                <textarea id="new_message" name="new_message" style="display: block; width: 100%;min-height: 120px;"></textarea><br>
+                <div><label><input type="checkbox" name="public_check"> Public message</label></div>
+                <input type="submit" class="btn btn-default" />
+              </form>
+              <br>
+            </center>
+          </div>
+          <div class="modal-footer">
+            <center>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </center>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "mentorsforall/footer.html" %}
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

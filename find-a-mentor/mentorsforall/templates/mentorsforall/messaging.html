@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE HTML5>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'mentorsforall/footerstyle.css' %}">
+
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.slim.js"></script>
+
+  <title>Messaging - Mentors for All</title>
+
+  <style>
+    :root {
+      --input-padding-x: 1.5rem;
+      --input-padding-y: 0.75rem;
+    }
+
+    .container-fluid{
+      margin: 20px 0px;
+    }
+
+    a {
+      color: #111;
+    }
+
+    a:hover {
+      color: #82d8d0;
+    }
+  </style>
+</head>
+
+<body>
+  {% include "mentorsforall/navbar.html" %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-4">
+        <div class="list-group" id="list-tab" role="tablist">
+          {% for p in profiles %}
+          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-{{p.id}}-list" data-toggle="list" href="#list-{{p.id}}" role="tab" aria-controls="{{p.id}}">
+            {{ p.givenname }} {{ p.familyname }}
+          </a>
+          {% empty %}
+          <p>No messages yet!<br>Time to start a conversation with mentors specialising in your chosen subjects!</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-8">
+        <div class="tab-content" id="nav-tabContent">
+          {% for p in profiles %}
+          <div class="tab-pane fade" id="list-{{p.id}}" role="tabpanel" aria-labelledby="list-{{p.id}}-list">
+            <div class="card">
+              <div class="card-body">
+            {% for m in messages %}
+            {% if m.sender == p or m.receiver == p %}
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <a href="/profile/{{m.sender.id}}">{{ m.sender.givenname }} {{ m.sender.familyname }}</a>:
+                    <span class="pull-right" style="font-weight: bold; font-size: 12px; color: #555">[Sent: {{ m.timestamp_sent }}]</span>
+                  </div>
+                  <div class="panel-body">{{ m.content }}</div>
+                  <div class="panel-footer"></div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+          <div class="card-footer text-muted">
+            <form method="POST" action="{% url 'messaging_post_message' %}">
+              {% csrf_token %}
+              <input type="hidden" name="receiver_id" value="{{ p.id }}">
+              <textarea id="new_message" name="new_message" style="display: block; width: 100%;min-height: 120px;"></textarea><br>
+              <input type="submit" class="btn btn-default" />
+            </form>
+            </div>
+          </div>
+        </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "mentorsforall/footer.html" %}
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

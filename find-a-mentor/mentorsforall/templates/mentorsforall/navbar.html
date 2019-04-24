@@ -1,0 +1,29 @@
+<nav class="navbar navbar-light navbar-expand-md justify-content-center" style="background-color:#80d8d0">
+    <a href="/" class="navbar-brand d-flex mr-auto">
+      <img src="/static/images/misc/logo2.png" height="30" class="d-inline-block align-center" alt="">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar3">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse w-100" id="collapsingNavbar3">
+        <ul class="navbar-nav w-100 justify-content-left">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'profileview' %}">My Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'messaging' %}">Messages</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'subjectlist' %}">Categories</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Settings</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'signout' %}">Log Out</a>
+          </li>
+        </ul>
+    </div>
+</nav>

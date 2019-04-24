@@ -1,0 +1,13 @@
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+body > .container-fluid {
+  flex-grow: 1;
+}

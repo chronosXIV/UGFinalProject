@@ -1,0 +1,191 @@
+<!DOCTYPE HTML5>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.slim.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <title>Mentors for All</title>
+
+  <style>
+    header {
+      position: relative;
+      background-color: black;
+      height: 40vh;
+      min-height: 25rem;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    header video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: 0;
+      -ms-transform: translateX(-50%) translateY(-50%);
+      -moz-transform: translateX(-50%) translateY(-50%);
+      -webkit-transform: translateX(-50%) translateY(-50%);
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    header .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    header .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: black;
+      opacity: 0.5;
+      z-index: 1;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    body {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body > .container-fluid {
+      flex-grow: 1;
+    }
+
+    .content {
+      margin: 20px 0px;
+    }
+
+    .btn {
+      background-color:#82d8d0;
+    }
+
+    .btn-default {
+       color: #111 !important;
+     }
+
+    #date-text {
+      line-height: 0px;
+    }
+
+    #about-text {
+      line-height: 15px;
+    }
+
+    @media (pointer: coarse) and (hover: none) {
+      header {
+        background: url('https://source.unsplash.com/XT5OInaElMw/1600x900') black no-repeat center center scroll;
+      }
+      header video {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  {% include "mentorsforall/navbar.html" %}
+  <header>
+    <div class="overlay"></div>
+    <!-- <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+      <source src="static/images/misc/test.mp4" type="video/mp4">
+    </video> -->
+    <div class="container h-100">
+      <div class="d-flex h-100 text-center align-items-center">
+        <div class="w-100 text-white">
+          <h1 class="display-3">Find Your Mentor</h1>
+          <p class="lead mb-0">Mentoring is a brain to pick, an ear to listen, and a push in the right direction.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+    <section class="my-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 mx-auto" style="border-right:1px solid #ccc;">
+            <form type="get" class="form-inline" action="{% url 'do_search' %}">
+              <div class="col-md-6">
+                <h3>Find a Mentor by
+                  <select class="form-control" name="mentor_dropdown" id="mentor_dropdown">
+                    <option>Subject</option>
+                    <option>Name</option>
+                    <option>City</option>
+                  </select></h3>
+              </div>
+              <div class="col-md-6">
+                <h3>
+                  <input id="search_box" name="search_box_mentor" class="form-control mr-sm-2" type="text" placeholder="Search">
+                  <button class="btn btn-default" type="submit">Search</button>
+                </h3>
+              </div>
+            </form>
+            <form type="get" class="form-inline" action="{% url 'do_search' %}">
+              <div class="col-md-6">
+                <h3>Find an Event by
+                  <select class="form-control" name="event_dropdown" id="event_dropdown">
+                    <option>Subject</option>
+                    <option>Name</option>
+                    <option>City</option>
+                    <option>Mentor</option>
+                  </select></h3>
+              </div>
+              <div class="col-md-6">
+                <h3>
+                  <input id="search_box" name="search_box_event" class="form-control mr-sm-2" type="text" placeholder="Search">
+                  <button class="btn btn-default" type="submit">Search</button>
+                </h3>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-6 mx-auto">
+            <h3>Events for You:</h3>
+            {% for event in events %}
+            <div class="card mb-3" style="max-width: 540px;">
+              <div class="row no-gutters">
+                <div class="col-md-4">
+                  <img src="{% if event.image %}{{ event.image.url }}{% endif %}" class="card-img" alt="event Image">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ event.name }}</h5>
+                    <p class="card-text" id="about-text">{{ event.about }}</p>
+                    <p class="card-text" id="date-text"><small class="text-muted">{{ event.date }} {{ event.time }}</small></p>
+                    <a href="{% url 'event' event_id=event.id %}" class="btn btn-default float-right">View</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <p>There are currently no events near your city or for your chosen subjects.<br>You can manually search for events via the search functionality.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  {% include "mentorsforall/footer.html" %}
+  <!-- Optional JavaScript for Bootstrap-->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>
