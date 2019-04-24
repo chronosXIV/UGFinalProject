@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('signup', views.signup, name='signup'),
+    path('ajax/validate_username', views.validate, name='validate'),
     path('complete_signup', views.complete_signup, name='complete_signup'),
     path('profilecreation', views.create_profile_view, name='createprofile'),
     path('complete_profile', views.complete_profile, name='complete_profile'),
@@ -22,6 +23,9 @@ urlpatterns = [
     path('signin', views.signin, name='signin'),
     path('messaging', views.messaging, name='messaging'),
     path('messaging/post_message', views.messaging_post_message_view, name='messaging_post_message'),
+    path('settings', views.settings_view, name='settings'),
+    path('settings/change_password', views.change_password, name='change_password'),
+    path('settings/change_subjects', views.change_subjects, name='change_subjects'),
     path('signout', views.signout, name='signout'),
     # path('filtered_matches', views.get_filtered_matching, name='get_filtered_matching'),
     path('signin/auth', views.login_auth_view, name='login_auth'),

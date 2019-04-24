@@ -1,6 +1,4 @@
-{% load static %}
-
-<link rel="stylesheet" type="text/css" href="{% static 'mentorsforall/style.css' %}">
+<!-- Developer: Elif Sebnem Cudi -->
 
 <!DOCTYPE HTML5>
 <html lang="en">
@@ -14,6 +12,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
   <title>Browse Categories - Mentors for All</title>
+  {% load static %}
+
+  <link rel="stylesheet" type="text/css" href="{% static 'mentorsforall/formstyle.css' %}">
   <script type="text/javascript">
     $(function() {
       $('#myList a').on('click', function(e) {
@@ -45,6 +46,11 @@
     body > .container-fluid {
       flex-grow: 1;
     }
+
+    .list-group-item.active {
+      background-color: #80d8d0;
+      border-color: #80d8d0;
+    }
   </style>
 </head>
 
@@ -54,71 +60,24 @@
     <div class="row">
       <div class="col-4">
         <div class="list-group" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-academic-list" data-toggle="list" href="#list-academic" role="tab" aria-controls="academic">
-            Academic
+          {% for c in categories %}
+          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-{{c}}-list" data-toggle="list" href="#list-{{c}}" role="tab" aria-controls="{{c}}">
+            {{ c }}
           </a>
-          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-language-list" data-toggle="list" href="#list-language" role="tab" aria-controls="language">Language</a>
-          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-musicalinstruments-list" data-toggle="list" href="#list-musicalinstruments" role="tab" aria-controls="musicalinstruments">Musical
-            Instruments</a>
-          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-arts-list" data-toggle="list" href="#list-arts" role="tab" aria-controls="arts">Arts</a>
-          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-healthandfitness-list" data-toggle="list" href="#list-healthandfitness" role="tab" aria-controls="healthandfitness">
-            Health and Fitness
-            <span class="badge badge-primary badge-pill">2</span>
-          </a>
-          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-professional-list" data-toggle="list" href="#list-professional" role="tab" aria-controls="professional">Professional</a>
-          <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" id="list-lifestyle-list" data-toggle="list" href="#list-lifestyle" role="tab" aria-controls="lifestyle">Lifestyle</a>
+          {% endfor %}
         </div>
       </div>
       <div class="col-8">
         <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane fade" id="list-academic" role="tabpanel" aria-labelledby="list-academic-list">
+          {% for c in categories %}
+          <div class="tab-pane fade" id="list-{{c}}" role="tabpanel" aria-labelledby="list-{{c}}-list">
             {% for s in subjectlist %}
-            {% if s.category == "AC" %}
-            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
+            {% if s.get_category_display == c %}
+            <a href="/do_search?mentor_dropdown=Subject&search_box_mentor={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
             {% endif %}
             {% endfor %}
           </div>
-          <div class="tab-pane fade" id="list-language" role="tabpanel" aria-labelledby="list-language-list">
-            {% for s in subjectlist %}
-            {% if s.category == "LANG" %}
-            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
-            {% endif %}
-            {% endfor %}
-          </div>
-          <div class="tab-pane fade" id="list-musicalinstruments" role="tabpanel" aria-labelledby="list-musicalinstruments-list">
-            {% for s in subjectlist %}
-            {% if s.category == "I" %}
-            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
-            {% endif %}
-            {% endfor %}</div>
-          <div class="tab-pane fade" id="list-arts" role="tabpanel" aria-labelledby="list-arts-list">
-            {% for s in subjectlist %}
-            {% if s.category == "AR" %}
-            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
-            {% endif %}
-            {% endfor %}
-          </div>
-          <div class="tab-pane fade" id="list-healthandfitness" role="tabpanel" aria-labelledby="list-healthandfitness-list">
-            {% for s in subjectlist %}
-            {% if s.category == "HANDF" %}
-            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
-            {% endif %}
-            {% endfor %}
-          </div>
-          <div class="tab-pane fade" id="list-professional" role="tabpanel" aria-labelledby="list-professional-list">
-            {% for s in subjectlist %}
-            {% if s.category == "P" %}
-            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
-            {% endif %}
-            {% endfor %}
-          </div>
-          <div class="tab-pane fade" id="list-lifestyle" role="tabpanel" aria-labelledby="list-lifestyle-list">
-            {% for s in subjectlist %}
-            {% if s.category == "L" %}
-            <a href="/do_search?search_box_subject={{s.name}}" class="list-group-item list-group-item-action">{{ s.name }}</a>
-            {% endif %}
-            {% endfor %}
-          </div>
+          {% endfor %}
         </div>
       </div>
     </div>

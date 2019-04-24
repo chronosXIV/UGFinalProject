@@ -146,6 +146,16 @@
 
             </p>
           </div>
+          <div class="col-sm-12">
+            <label for="city">City:</label>
+              <select id="city" name="city" class="form-control" style="width:50%;" data-style="btn-info">
+                <option value="London">London</option>
+                <option value="Paris">Paris</option>
+                <option value="Seoul">Seoul</option>
+                <option value="Istanbul">Istanbul</option>
+              </select>
+            </div>
+            <br>
 
 
         <form type="get" class="form-inline" action="{% url 'do_search' %}">
@@ -180,7 +190,7 @@
                 <p class="card-text">{% for s in match.subjects.all %}<span class="badge badge-info">{{ s.name }}</span> {% endfor %}</p>
               </div>
               <div class="card-footer">
-                <a href="/profile/{{match.id}}" class="btn btn-default">See Profile</a>
+                <a href="{% url 'profile_view' profile_id=match.id%}" class="btn btn-default">See Profile</a>
               </div>
             </div>
             {% endfor %}

@@ -1,7 +1,5 @@
+<!-- Developer: Elif Sebnem Cudi -->
 {% if not forloop.last %}
-  {% ifequal forloop.revcounter 2 %}and
-  {% else %}
-  ,
-  {% endifequal %}
+  {% ifequal forloop.revcounter 2 %}and{% else %},{% endifequal %}
   {% else %}
 {% endif %}

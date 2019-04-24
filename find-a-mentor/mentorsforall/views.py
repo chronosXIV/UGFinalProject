@@ -5,8 +5,10 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Profile, Message, Subject, Event
 from django.db.models import Q
+from django.http import JsonResponse
 
 import datetime
+import itertools
 
 User = get_user_model()
 
@@ -64,6 +66,15 @@ def signup(request):
 
     return render(request, 'mentorsforall/signup.html', context)
 
+def validate(request):
+    username = request.GET.get('register_username', None)
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    if data['is_taken']:
+        data['error_message'] = 'A user with this username already exists.'
+    return JsonResponse(data)
+
 # handle registration
 def complete_signup(request):
 
@@ -77,6 +88,10 @@ def complete_signup(request):
     f_password = fields.get('register_password')
     f_privacy_consent = fields.get('register_privacy_consent')
     f_role = fields.get('register_role')
+
+    f_subjects = fields.getlist('register_subjects', None)
+    f_subjects_objs = Subject.objects.filter(name__in = f_subjects)
+
     new_user = User.objects.create_user(f_username, f_email, f_password)
     new_profile = Profile(  gender=None,
                             birthdate=None,
@@ -86,8 +101,22 @@ def complete_signup(request):
                             job=None,
                             accountid=new_user
                         )
-
     new_profile.save()
+
+    for subj in f_subjects_objs:
+        if not subj == "n-a":
+            new_profile.subjects.add(subj)
+
+    for x in range(4):
+        print("looping "+str(x))
+        if fields.get('new_subject_'+str(x)):
+            f_new_subject_name = fields.get('new_subject_'+str(x))
+            f_new_subject_category = fields.get('new_subject_category_'+str(x))
+            new_subject = Subject(  name=f_new_subject_name,
+                                    category=f_new_subject_category
+                                )
+            new_subject.save()
+            new_profile.subjects.add(new_subject)
 
     user = authenticate(request, username=f_username, password=f_password)
 
@@ -146,11 +175,11 @@ def home(request):
     events = []
 
     for subject in p.subjects.all():
-        events.extend(Event.objects.filter(subjects__id__exact=subject.id))
+        events.extend(Event.objects.filter(Q(subjects__id__exact=subject.id) & ~Q(attendees__id__exact=current_user.id)))
     eventlist = list(dict.fromkeys(events))
 
     if len(eventlist) == 0:
-        events.extend(Event.objects.filter(city=p.city))
+        events.extend(Event.objects.filter(Q(city=p.city)&~Q(attendees__id__exact=current_user.id)))
         eventlist = list(dict.fromkeys(events))
 
     context = {
@@ -298,8 +327,16 @@ def subjectlist_view(request):
 
     subjectlist = list(Subject.objects.all())
 
+    categories = []
+
+    for s in subjectlist:
+        category = s.get_category_display()
+        categories.append(category)
+    categories = list(set(categories))
+
     context = {
-        'subjectlist': subjectlist
+        'subjectlist': subjectlist,
+        'categories': categories
     }
 
     return render(request, 'mentorsforall/subjectlist.html', context)
@@ -427,6 +464,41 @@ def event_management_view(request, event_id=None):
         e.save()
 
     return redirect(event_view, event_id=event_id)
+
+def settings_view(request):
+    if not request.user.is_authenticated:
+        return redirect(index)
+
+    current_user = request.user
+
+    p = Profile.objects.get(accountid=current_user.id)
+
+    profilesubjects = []
+
+    for s in p.subjects.all():
+        profilesubjects.append(s.name)
+
+    subjects = Subject.objects.all()
+
+    categories = []
+
+    for s in subjects:
+        category = s.get_category_display()
+        categories.append(category)
+    categories = list(set(categories))
+
+    context = {
+        'subjects': subjects,
+        'categories': categories,
+        'profilesubjects': profilesubjects
+    }
+    return render(request, 'mentorsforall/settings.html', context)
+
+def change_subjects(request):
+    return redirect(settings_view)
+
+def change_password(request):
+    return redirect(settings_view)
 
 #logout page
 def signout(request):

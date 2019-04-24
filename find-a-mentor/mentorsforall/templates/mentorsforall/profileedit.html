@@ -1,4 +1,7 @@
-<!--  https://www.bootply.com/sY7gQy6XF7-->
+<!-- Developer: Elif Sebnem Cudi -->
+<!-- Following was made possible by using these resources:
+- https://www.bootply.com/sY7gQy6XF7
+-->
 
 <!DOCTYPE HTML5>
 <html lang="en">
@@ -29,6 +32,9 @@
       margin: 0 auto;
       width: 50%;
       border-radius: 2rem;
+    }
+    .container {
+      margin-top:20px;
     }
 
     .bs-searchbox input {
@@ -71,6 +77,7 @@
       <!-- edit form column -->
       <div class="col-md-9 personal-info">
         <h3>Personal Info</h3>
+        <hr>
         <form class="form-horizontal" role="form">
           <div class="form-group">
             <label class="col-lg-3 control-label">First Name:</label>
@@ -117,7 +124,7 @@
           <div class="form-group">
             <label class="col-lg-3 control-label">Gender:</label>
             <div class="col-lg-8">
-              <select id="register_gender" name="register_gender" class="selectpicker form-control" data-style="btn-info" required>
+              <select id="register_gender" name="register_gender" class="selectpicker form-control" data-style="btn-info">
                 <option selected="selected" value="M">Male</option>
                 <option value="F">Female</option>
                 <option value="O">Other</option>
@@ -128,28 +135,7 @@
           <div class="form-group">
             <label class="col-lg-3 control-label">About:</label>
             <div class="col-lg-8">
-              <textarea class="form-control" name="register_about" autocomplete="off" id="register_about" value="{{profile.about}}"></textarea>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-md-3 control-label">Username:</label>
-            <div class="col-md-8">
-              <input class="form-control" id="register_username" name="register_username" type="text" value="{{request.user.username}}">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-md-3 control-label">Password:</label>
-            <div class="col-md-8">
-              <input class="form-control" id="register_password" name="register_password" type="password" value="11111122333">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-md-3 control-label">Confirm password:</label>
-            <div class="col-md-8">
-              <input class="form-control" id="register_password" name="register_password" type="password" value="11111122333">
+              <textarea class="form-control" name="register_about" autocomplete="off" id="register_about">{{profile.about}}</textarea>
             </div>
           </div>
 
@@ -165,7 +151,6 @@
       </div>
     </div>
   </div>
-  <hr>
   {% include "mentorsforall/footer.html" %}
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->

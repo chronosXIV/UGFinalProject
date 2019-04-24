@@ -1,3 +1,13 @@
+<!-- Developer: Elif Sebnem Cudi
+
+Following was made possible by using these resources:
+- https://developer.snapappointments.com/bootstrap-select/
+- https://getbootstrap.com/
+- https://www.sanwebe.com/2013/03/addremove-input-fields-dynamically-with-jquery
+- https://simpleisbetterthancomplex.com/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html
+
+-->
+
 <!DOCTYPE HTML5>
 <html lang="en">
 
@@ -11,7 +21,7 @@
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'mentorsforall/formstyle.css' %}">
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="http://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <!-- Latest compiled and minified CSS -->
@@ -91,11 +101,30 @@
       color: #82d8d0;
     }
 
+    .custom-padding {
+      padding-right: 1px !important;
+      padding-left: 1px !important;
+    }
+
+    .custom-padding2 {
+      padding-right: 1px !important;
+    }
+
+    .make-center{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .remove_field {
+      padding-bottom:12px;
+    }
+
   </style>
-  <!-- https://www.sanwebe.com/2013/03/addremove-input-fields-dynamically-with-jquery -->
+
   <script type="text/javascript">
     $(document).ready(function() {
-      var max_fields = 5; //maximum input boxes allowed
+      var max_fields = 4; //maximum input boxes allowed
       var wrapper = $(".input_fields_wrap"); //Fields wrapper
       var add_button = $(".add_field_button"); //Add button ID
 
@@ -103,14 +132,40 @@
       $(add_button).click(function(e) { //on add input button click
         e.preventDefault();
         if (x < max_fields) { //max input box allowed
+          $(wrapper).append(`<div>
+            <div class="row">
+              <div class="col-sm-7 custom-padding2">
+                <div class="form-label-group">
+                  <input type="text" id="new_subject_${x}" name="new_subject_${x}" class="form-control" placeholder="Subject">
+                  <label for="new_subject_${x}" class="col-sm-2 col-form-label my-custom-width">Subject</label>
+                </div>
+              </div>
+              <div class="col-sm-4 custom-padding">
+                <div class="form-label-group">
+                  <script type="text/javascript">
+                    $(document).ready(function() {
+                      $('.selectpicker').selectpicker();
+                    });
+                  <\/script>
+                  <select class="selectpicker form-control col-form-label" data-style="btn-info" name="new_subject_category_${x}" id="new_subject_category_${x}">
+                    {% for category in categories %}
+                    <option>{{ category }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-1 custom-padding make-center">
+                <a href="#" class="remove_field">X</a>
+                </div>
+            </div>
+            </div>`); //add input box
           x++; //text box increment
-          $(wrapper).append('<div><div class="row"><div class="col-sm-7"><div class="form-label-group"><input type="text" id="new_subject_'+x+'" name="new_subject_'+x+'" class="form-control" placeholder="Subject"><label for="new_subject_'+x+'" class="col-sm-2 col-form-label my-custom-width">Subject</label></div></div><div class="col-sm-5"><div class="form-label-group"><select class="selectpicker form-control col-form-label" data-style="btn-info" name="new_subject_category_'+x+'" id="new_subject_category_'+x+'" style="position:absolute;">{% for category in categories %}<option>{{ category }}</option>{% endfor %}</select></div></div></div><a href="#" class="remove_field">Remove</a></div>'); //add input box
         }
       });
 
       $(wrapper).on("click", ".remove_field", function(e) { //user click on remove text
         e.preventDefault();
-        $(this).parent('div').remove();
+        $(this).parents().eq(1).remove();
         x--;
       })
     });
@@ -199,26 +254,29 @@
                   <div class="input_fields_wrap">
                     <div>
                     <div class="row">
-                      <div class="col-sm-7">
+                      <div class="col-sm-7 custom-padding2">
                         <div class="form-label-group">
-                          <input type="text" id="new_subject" name="new_subject" class="form-control" placeholder="Subject">
-                          <label for="new_subject" class="col-sm-2 col-form-label my-custom-width">Subject</label>
+                          <input type="text" id="new_subject_0" name="new_subject_0" class="form-control" placeholder="Subject">
+                          <label for="new_subject_0" class="col-sm-2 col-form-label my-custom-width">Subject</label>
                         </div>
                       </div>
-                      <div class="col-sm-5">
+                      <div class="col-sm-4 custom-padding">
                         <div class="form-label-group">
                           <script type="text/text/javascript">
                             $(document).ready(function() {
                               $('.selectpicker').selectpicker();
                             });
                           </script>
-                          <select class="selectpicker form-control col-form-label" data-style="btn-info" name="new_subject_category" id="new_subject_category">
+                          <select class="selectpicker form-control col-form-label" data-style="btn-info" name="new_subject_category_0" id="new_subject_category_0">
                             {% for category in categories %}
                             <option>{{ category }}</option>
                             {% endfor %}
                           </select>
                         </div>
                       </div>
+                      <div class="col-sm-1 custom-padding make-center">
+                        <a href="#" class="remove_field" style="visibility: hidden">X</a>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -227,7 +285,7 @@
                   <br>
                   <br>
                   <h4>Your data</h4>
-                  <p>We require your personal information in order to match you with others on the site. Your data will never be shared with any third parties without your consent.</p>
+                  <p>We require your personal information in order to have a fully completed profile that can be displayed to other users. Your data will never be shared with any third parties without your consent.</p>
                   <div class="custom-control custom-checkbox mb-3">
                     <input type="checkbox" name="register_privacy_consent" class="custom-control-input" id="customCheck1" required>
                     <label class="custom-control-label" for="customCheck1">I accept</label>
@@ -245,6 +303,22 @@
       </div>
     </div>
   </div>
+
+  <script type="text/javascript">
+    $("#register_username").change(function () {
+      var form = $(this).closest("form");
+      $.ajax({
+        url: '{% url "validate" %}',
+        data: form.serialize(),
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            alert(data.error_message);
+          }
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

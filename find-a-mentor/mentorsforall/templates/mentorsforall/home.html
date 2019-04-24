@@ -1,3 +1,5 @@
+<!-- Developer: Elif Sebnem Cudi -->
+
 <!DOCTYPE HTML5>
 <html lang="en">
 
@@ -63,7 +65,7 @@
       flex-direction: column;
     }
 
-    body > .container-fluid {
+    body>.container{
       flex-grow: 1;
     }
 
@@ -85,6 +87,10 @@
 
     #about-text {
       line-height: 15px;
+    }
+
+    .view-button {
+      margin-bottom: 10px;
     }
 
     @media (pointer: coarse) and (hover: none) {
@@ -160,14 +166,14 @@
             <div class="card mb-3" style="max-width: 540px;">
               <div class="row no-gutters">
                 <div class="col-md-4">
-                  <img src="{% if event.image %}{{ event.image.url }}{% endif %}" class="card-img" alt="event Image">
+                  <img src="{% if event.image %}{{ event.image.url }}{% endif %}" class="card-img img-fluid" alt="event Image">
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
                     <h5 class="card-title">{{ event.name }}</h5>
                     <p class="card-text" id="about-text">{{ event.about }}</p>
                     <p class="card-text" id="date-text"><small class="text-muted">{{ event.date }} {{ event.time }}</small></p>
-                    <a href="{% url 'event' event_id=event.id %}" class="btn btn-default float-right">View</a>
+                    <a href="{% url 'event' event_id=event.id %}" class="btn btn-default float-right view-button">View</a>
                   </div>
                 </div>
               </div>
