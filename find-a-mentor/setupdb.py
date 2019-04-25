@@ -119,13 +119,13 @@ a12.save()
 
 [ p.delete() for p in Profile.objects.all() ]
 
-p1 = Profile(image='', gender='F', job='Developer', role='TEE', about='Hi! I\'m Sheb!', birthdate='1997-04-15', givenname='Lili', familyname='Rochefort', city='London', accountid=a1)
+p1 = Profile(image='', gender='F', job='Developer', role='TEE', about='Hi! I\'m Sheb!', birthdate='1997-04-15', givenname='Lili', familyname='Rochefort', city='Paris', accountid=a1)
 p1.save()
 
 p2 = Profile(image='', gender='F', job='Teacher', role='TOR', about='Hi! I\'m Nina', birthdate='1997-04-15', givenname='Nina', familyname='Williams', city='London', accountid=a2)
 p2.save()
 
-p3 = Profile(image='', gender='M', job='Martial Artist', role='TOR', about='Hi! I\'m Hwoarang', birthdate='1997-04-15', givenname='Hwoa', familyname='Rang', city='London', accountid=a3)
+p3 = Profile(image='', gender='M', job='Martial Artist', role='TOR', about='Hi! I\'m Hwoarang', birthdate='1997-04-15', givenname='Hwoa', familyname='Rang', city='Seoul', accountid=a3)
 p3.save()
 
 p4 = Profile(image='', gender='M', job='Student', role='TEE', about='Hi! I\'m Armour King. The less cool of the kings.', birthdate='1997-01-19', givenname='Armour', familyname='King', city='London', accountid=a4)
@@ -134,16 +134,16 @@ p4.save()
 p5 = Profile(image='', gender='M', job='Architect', role='TOR', about='Hi! I\'m Dragunov!', birthdate='1997-01-19', givenname='Sergei', familyname='Dragunov', city='London', accountid=a5)
 p5.save()
 
-p6 = Profile(image='', gender='F', job='Teacher', role='TOR', about='Hi! I\'m Asuka!', birthdate='1997-01-19', givenname='Asuka', familyname='Kazama', city='London', accountid=a6)
+p6 = Profile(image='', gender='F', job='Teacher', role='TOR', about='Hi! I\'m Asuka!', birthdate='1997-01-19', givenname='Asuka', familyname='Kazama', city='Tokyo', accountid=a6)
 p6.save()
 
-p7 = Profile(image='', gender='M', job='Project Manager', role='TOR', about='Hi! I\'m Jin!', birthdate='1997-01-19', givenname='Jin', familyname='Kazama', city='London', accountid=a7)
+p7 = Profile(image='', gender='M', job='Project Manager', role='TOR', about='Hi! I\'m Jin!', birthdate='1997-01-19', givenname='Jin', familyname='Kazama', city='Paris', accountid=a7)
 p7.save()
 
 p8 = Profile(image='', gender='F', job='Store Manager', role='TOR', about='Hi! I\'m Anna!', birthdate='1997-01-19', givenname='Anna', familyname='Williams', city='London', accountid=a8)
 p8.save()
 
-p9 = Profile(image='', gender='M', job='Student', role='TEE', about='Hi! I\'m Paul!', birthdate='1997-01-19', givenname='Paul', familyname='Phoenix', city='London', accountid=a9)
+p9 = Profile(image='', gender='M', job='Student', role='TEE', about='Hi! I\'m Paul!', birthdate='1997-01-19', givenname='Paul', familyname='Phoenix', city='Paris', accountid=a9)
 p9.save()
 
 p10 = Profile(image='', gender='F', job='Unemployed', role='TEE', about='Hi! I\'m Xiaoyu!', birthdate='1997-01-19', givenname='Ling', familyname='Xiaoyu', city='London', accountid=a10)
@@ -251,7 +251,7 @@ e3.subjects.add(s4,s6)
 e3.attendees.add(p8, p10)
 e3.invitees.add(p1, p5)
 
-e4 = Event(image='', date='2019-12-04', time='12:00', public=True, name='Park Meetup', about='Bring your snacks! We are going to talk about architecture!', host=p2, location='Hyde Park', city='London')
+e4 = Event(image='', date='2019-12-04', time='12:00', public=True, name='Park Meetup', about='Bring your snacks! We are going to talk about architecture!', host=p5, location='Hyde Park', city='London')
 e4.save()
 e4.subjects.add(s14)
 e4.attendees.add(p1)
@@ -263,7 +263,7 @@ e5.subjects.add(s8, s15, s9, s16, s17, s19)
 e5.attendees.add(p4, p3, p9)
 e5.invitees.add(p1, p5)
 
-e6 = Event(image='', date='2019-12-04', time='10:00', public=True, name='Coffee Meet 2', about='Meet me, your mentor, for a coffee so we can talk about stuff.', host=p2, location='Starbucks', city='London')
+e6 = Event(image='', date='2019-12-04', time='10:00', public=True, name='Coffee Meet 2', about='Meet me, your mentor, for a coffee so we can talk about stuff.', host=p8, location='Starbucks', city='London')
 e6.save()
 e6.subjects.add(s4,s6)
 e6.attendees.add(p1, p4, p3, p9)
@@ -275,25 +275,25 @@ e7.subjects.add(s8, s15, s9, s16, s17, s19)
 e7.attendees.add(p8)
 e7.invitees.add(p1, p5)
 
-e8 = Event(image='', date='2019-12-04', time='10:00', public=False, name='Coffee Meet 4', about='Meet me, your mentor, for a coffee so we can talk about stuff.', host=p2, location='Starbucks', city='London')
+e8 = Event(image='', date='2019-12-04', time='10:00', public=False, name='Coffee Meet 4', about='Meet me, your mentor, for a coffee so we can talk about stuff.', host=p7, location='Starbucks', city='London')
 e8.save()
 e8.subjects.add(s4,s6)
 e8.attendees.add(p9, p4, p10)
 e8.invitees.add(p1, p5)
 
-e9 = Event(image='', date='2019-12-04', time='10:00', public=False, name='Coffee Meet 5', about='Meet me, your mentor, for a coffee so we can talk about stuff.', host=p2, location='Starbucks', city='Paris')
+e9 = Event(image='', date='2019-12-04', time='10:00', public=False, name='Coffee Meet 5', about='Meet me, your mentor, for a coffee so we can talk about stuff.', host=p6, location='Starbucks', city='Paris')
 e9.save()
 e9.subjects.add(s8, s15, s9, s16, s17, s19)
 e9.attendees.add(p4, p3, p9)
 e9.invitees.add(p1, p5, p4, p3, p9)
 
-e10 = Event(image='', date='2019-12-04', time='10:00', public=True, name='Coffee Meet 6', about='Meet me, your mentor, for a coffee so we can talk about stuff.', host=p2, location='Starbucks', city='Seoul')
+e10 = Event(image='', date='2019-12-04', time='10:00', public=True, name='Coffee Meet 6', about='Meet me, your mentor, for a coffee so we can talk about stuff.', host=p5, location='Starbucks', city='Seoul')
 e10.save()
 e10.subjects.add(s4,s6)
 e10.attendees.add(p6)
 e10.invitees.add(p1, p5)
 
-e11 = Event(image='', date='2019-12-04', time='10:00', public=False, name='Coffee Meet 7', about='Meet me, your mentor, for a coffee so we can talk about stuff.', host=p2, location='Starbucks', city='Paris')
+e11 = Event(image='', date='2019-12-04', time='10:00', public=False, name='Coffee Meet 7', about='Meet me, your mentor, for a coffee so we can talk about stuff.', host=p3, location='Starbucks', city='Paris')
 e11.save()
 e11.subjects.add(s8, s15, s9, s16, s17, s19)
 e11.attendees.add(p7)

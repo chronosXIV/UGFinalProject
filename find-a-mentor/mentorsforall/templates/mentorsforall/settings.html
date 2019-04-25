@@ -57,6 +57,15 @@
       padding: 0.1rem !important;
     }
 
+    .btn-info {
+      background-color: #82d8d0;
+      border-color: #82d8d0;
+      font-size: 0.9rem;
+      letter-spacing: 0.05rem;
+      padding: 0.75rem 1rem;
+      border-radius: 2rem;
+    }
+
     .list-group-item.active {
       background-color: #80d8d0;
       border-color: #80d8d0;
@@ -79,6 +88,11 @@
 
     .remove_field {
       padding-bottom:12px;
+    }
+
+    .link-text, .view-button{
+      margin-bottom: 10px;
+      color: #fff;
     }
   </style>
   <script type="text/javascript">
@@ -146,10 +160,55 @@
       <div class="col-8">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-event" role="tabpanel" aria-labelledby="list-event-list">
-            ...
+            {% if profile.role == "TOR" %}
+            <h4>Events You are Hosting:</h4>
+            {% for event in eventshosting %}
+            <div class="card mb-3" style="max-width: 540px;">
+              <div class="row no-gutters">
+                <div class="col-md-4">
+                  <img src="{% if event.image %}{{ event.image.url }}{% endif %}" class="card-img img-fluid" alt="event Image">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ event.name }}</h5>
+                    <p class="card-text" id="about-text">{{ event.about }}</p>
+                    <p class="card-text" id="date-text"><small class="text-muted">{{ event.date }} {{ event.time }}</small></p>
+                    <a href="{% url 'event' event_id=event.id %}" class="btn btn-default float-right view-button">View</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <p>You are not hosting any events.</p>
+            {% endfor %}
+            <a href="#" class="btn btn-default link-text" role="button">Host an Event</a>
+            <hr>
+            {% endif %}
+            <h4>Events You are Attending:</h4>
+            {% for event in eventsattending %}
+            <div class="card mb-3" style="max-width: 540px;">
+              <div class="row no-gutters">
+                <div class="col-md-4">
+                  <img src="{% if event.image %}{{ event.image.url }}{% endif %}" class="card-img img-fluid" alt="event Image">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ event.name }}</h5>
+                    <p class="card-text" id="about-text">{{ event.about }}</p>
+                    <p class="card-text" id="date-text"><small class="text-muted">{{ event.date }} {{ event.time }}</small></p>
+                    <a href="{% url 'event' event_id=event.id %}" class="btn btn-default float-right view-button">View</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <p>There are currently no events you are attending.<br>You can manually search for events via the search functionality or go to your homepage for recommended events!.</p>
+            {% endfor %}
           </div>
-          <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
-          <div class="tab-pane fade" id="list-subjects" role="tabpanel" aria-labelledby="list-subjects-list">
+          <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+            <a href="{% url 'profileedit' %}" class="btn btn-default link-text" role="button">Edit your profile</a>
+          </div>
+          <div class="tab-pane fade" id="list-subjects" style="margin-top:20px;" role="tabpanel" aria-labelledby="list-subjects-list">
             <form method="post" action="{% url 'change_subjects' %}" class="form-horizontal">
               {% csrf_token %}
               <div class="form-label-group" style="top:-15px;left:10px;">
@@ -207,7 +266,7 @@
             </form>
           </div>
           <div class="tab-pane fade" id="list-account" role="tabpanel" aria-labelledby="list-account-list">
-            <h4>Changing You Username</h4>
+            <h4>Changing Your Username</h4>
             <p>Your username is unique to you and is only used during the sign in process. You cannot change your username.</p>
             <hr>
             <h4>Changing Your Password</h4>

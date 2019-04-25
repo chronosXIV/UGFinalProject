@@ -12,18 +12,22 @@ import itertools
 
 User = get_user_model()
 
+# INDEX
+
 def index(request):
     if request.user.is_authenticated:
         return redirect(home)
     return render(request,'mentorsforall/index.html')
 
-#sign in page
+# SIGN IN
+
 def signin(request):
     if request.user.is_authenticated:
         return redirect(home)
     return render(request, 'mentorsforall/signin.html')
 
-# handle user authentication POST
+# USER AUTHENTICATION
+
 def login_auth_view(request):
     if request.method != 'POST': return redirect(home)
 
@@ -41,7 +45,11 @@ def login_auth_view(request):
     else:
         return redirect(signin)
 
-#register page
+# REGISTER INCLUDING:
+# validation of unique username
+# create new user and empty profile
+# populate profile
+
 def signup(request):
     if request.user.is_authenticated:
         return redirect(home)
@@ -164,7 +172,8 @@ def complete_profile(request):
 
     return redirect(home)
 
-#home page
+# HOME
+
 def home(request):
     if not request.user.is_authenticated:
         return redirect(index)
@@ -188,6 +197,8 @@ def home(request):
     }
 
     return render(request, 'mentorsforall/home.html', context)
+
+# SEARCH RESULTS
 
 def do_search(request):
     if not request.user.is_authenticated:
@@ -238,6 +249,8 @@ def do_search(request):
         'searchedfor': searchedfor
     }
     return render(request, 'mentorsforall/searchresults.html', context)
+
+# PROFILE VIEW AND EDIT
 
 @profile
 def profile_view(request, profile_id=None):
@@ -319,6 +332,27 @@ def profile_image_upload_endpoint(request):
     else:
         return redirect(index)
 
+def profile_save(request):
+
+    fields = QueryDict(request.body)
+    f_first_name = fields.get('register_first_name')
+    f_last_name = fields.get('register_last_name')
+    f_email = fields.get('register_last_name')
+    f_city = fields.get('register_city')
+    f_dob = fields.get('register_dob')
+    f_job = fields.get('register_job')
+    f_about = fields.get('register_about')
+
+    current_user = request.user
+
+    p = Profile.objects.filter(accountid=current_user.id)
+
+    p.update(givenname=f_first_name,familyname=f_last_name,city=f_city,job=f_job,about=f_about,birthdate=f_dob)
+
+    return redirect(profile_view)
+
+# SUBJECT LIST
+
 def subjectlist_view(request):
     if not request.user.is_authenticated:
         return redirect(index)
@@ -340,6 +374,8 @@ def subjectlist_view(request):
     }
 
     return render(request, 'mentorsforall/subjectlist.html', context)
+
+# MESSAGING
 
 def messaging(request):
 
@@ -389,6 +425,8 @@ def messaging_post_message_view(request):
     new_message.save()
 
     return redirect(messaging)
+
+# EVENT CREATION, VIEW AND EDIT
 
 def event_view(request, event_id=None):
 
@@ -465,6 +503,39 @@ def event_management_view(request, event_id=None):
 
     return redirect(event_view, event_id=event_id)
 
+def event_image_upload_endpoint(request, event_id=None):
+    if request.method == 'POST':
+        try:
+            uploaded_file = request.FILES['event_image']
+
+            e = Event.objects.get(id=event_id)
+
+            e.image.save('', uploaded_file)
+        except:
+            uploaded_file = None;
+    if 'pp_event_edit_view' in request.session:
+        return redirect(event_edit_view)
+    elif 'pp_create_event_view' in request.session:
+        return redirect(event_edit_view) #create_event_view
+    else:
+        return redirect(index)
+
+def event_save(request, event_id=None):
+
+    fields = QueryDict(request.body)
+    f_name = fields.get('register_name')
+    f_city = fields.get('register_city')
+    f_date = fields.get('register_date')
+    f_time = fields.get('register_time')
+
+    e = Event.objects.filter(id=event_id)
+
+    e.update(name=f_name,city=f_city,date=f_date,time=f_time)
+
+    return redirect(event_view, event_id=event_id)
+
+# SETTINGS
+
 def settings_view(request):
     if not request.user.is_authenticated:
         return redirect(index)
@@ -487,10 +558,16 @@ def settings_view(request):
         categories.append(category)
     categories = list(set(categories))
 
+    e = Event.objects.filter(attendees__id__exact=current_user.id)
+    h = Event.objects.filter(host__id__exact=current_user.id)
+
     context = {
         'subjects': subjects,
         'categories': categories,
-        'profilesubjects': profilesubjects
+        'profile': p,
+        'profilesubjects': profilesubjects,
+        'eventsattending': e,
+        'eventshosting': h
     }
     return render(request, 'mentorsforall/settings.html', context)
 

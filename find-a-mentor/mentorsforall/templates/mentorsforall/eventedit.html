@@ -15,31 +15,52 @@
   <link rel="stylesheet" type="text/css" href="{% static 'mentorsforall/footerstyle.css' %}">
   <title>Edit Your Event - Mentors for All</title>
   <style>
+    :root {
+      --input-padding-x: 1.5rem;
+      --input-padding-y: 0.75rem;
+    }
+
+    .btn-default {
+       color: #111 !important;
+       background-color:#82d8d0;
+    }
+
+    .event-userpic img {
+      float: none;
+      margin: 0 auto;
+      width: 50%;
+      border-radius: 2rem;
+    }
+
     .container {
-    margin: 20px 0px;
-  }
+      margin-top:20px;
+    }
 
-  html {
+    html {
     height: 100%;
-  }
+    }
 
-  body {
+    body {
     min-height: 100%;
     display: flex;
     flex-direction: column;
-  }
+    }
 
-  body>.container {
+    body>.container {
     flex-grow: 1;
-  }
+    }
 
-  .btn {
-    background-color:#82d8d0;
-  }
+    .bs-searchbox input {
+      padding: 0.1rem !important;
+    }
 
-  .btn-default {
-     color: #111 !important;
-  }
+    a {
+      color: #111;
+    }
+
+    a:hover {
+      color: #82d8d0;
+    }
   </style>
 </head>
 
@@ -49,69 +70,62 @@
     <h1>Edit Event</h1>
     <hr>
     <div class="row">
+      <!-- left column -->
       <div class="col-md-3">
         <div class="text-center">
-          <img src="{% if event.image %}{{ event.image.url }}{% endif %}" alt="Event Image" class="avatar img-circle">
+          <div class="event-userpic">
+            <img src="{% if event.image %}{{ event.image.url }}{% endif %}" alt="Event Image" class="avatar img-circle" id="event_image_image">
+          </div>
+          <br>
           <h6>Upload a different photo...</h6>
-          <input type="file" class="form-control">
+          <form method="post" action="{% url 'event_image_upload_endpoint' event_id=event.id %}" enctype="multipart/form-data" class="form-horizontal">
+            {% csrf_token %}
+            <input type="file" name="event_image" class="form-control" value="" id="profile_image">
+            <br>
+            <input type="submit" name="event_image_button" value="Upload Image" id="event_image_button" class="btn btn-default upload-image-button">
+          </form>
         </div>
       </div>
-      <div class="col-md-9 personal-info">
+      <!-- edit form column -->
+      <div class="col-md-9 event-info">
         <h3>Event Info</h3>
 
-        <form class="form-horizontal" role="form">
+        <form method="post" action="{% url 'event_save' event_id=event.id %}" class="form-horizontal">
+          {% csrf_token %}
           <div class="form-group">
             <label class="col-lg-3 control-label">Event name:</label>
             <div class="col-lg-8">
-              <input class="form-control" type="text" value="{{event.name}}">
+              <input class="form-control" id="register_name" name="register_name" type="text" value="{{event.name}}">
             </div>
           </div>
 
           <div class="form-group">
             <label class="col-lg-3 control-label">City:</label>
             <div class="col-lg-8">
-              <input class="form-control" type="text" value="{{event.city}}">
+              <input class="form-control" id="register_city" name="register_city" type="text" value="{{event.city}}">
             </div>
           </div>
 
           <div class="form-group">
-            <label class="col-lg-3 control-label">Date:</label>
+            <label class="col-lg-3 control-label">Date (YYYY-MM-DD):</label>
             <div class="col-lg-8">
-              <input class="form-control" type="text" value="{{event.date}}">
+              <input class="form-control" id="register_date" name="register_date" type="text" value="{{event.date}}">
             </div>
           </div>
 
           <div class="form-group">
             <label class="col-lg-3 control-label">Time:</label>
             <div class="col-lg-8">
-              <input class="form-control" type="text" value="{{event.time}}">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-lg-3 control-label">Time Zone:</label>
-            <div class="col-lg-8">
-              <div class="ui-select">
-                <select id="user_time_zone" class="form-control">
-                  <option value="Hawaii">(GMT-10:00) Hawaii</option>
-                  <option value="Alaska">(GMT-09:00) Alaska</option>
-                  <option value="Pacific Time (US &amp; Canada)">(GMT-08:00) Pacific Time (US &amp; Canada)</option>
-                  <option value="Arizona">(GMT-07:00) Arizona</option>
-                  <option value="Mountain Time (US &amp; Canada)">(GMT-07:00) Mountain Time (US &amp; Canada)</option>
-                  <option value="Central Time (US &amp; Canada)" selected="selected">(GMT-06:00) Central Time (US &amp; Canada)</option>
-                  <option value="Eastern Time (US &amp; Canada)">(GMT-05:00) Eastern Time (US &amp; Canada)</option>
-                  <option value="Indiana (East)">(GMT-05:00) Indiana (East)</option>
-                </select>
-              </div>
+              <input class="form-control" id="register_time" name="register_time" type="text" value="{{event.time}}">
             </div>
           </div>
 
           <div class="form-group">
             <label class="col-md-3 control-label"></label>
             <div class="col-md-8">
-              <input type="button" class="btn btn-primary" value="Save Changes">
+              <input type="submit" class="btn btn-success" value="Save Changes">
               <span></span>
-              <input type="reset" class="btn btn-default" value="Cancel">
+              <input type="reset" class="btn btn-warning" value="Cancel">
             </div>
           </div>
         </form>
